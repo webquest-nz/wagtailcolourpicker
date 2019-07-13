@@ -8,7 +8,7 @@ Installation
 
 .. code:: bash
 
-   pip install wagtailcolourpicker
+   pip install git+https://github.com/Tivix/wagtailcolourpicker.git@master
 
 Setup
 -----
@@ -88,8 +88,3 @@ Create yourself a superuser
     $ python manage.py createsuperuser
 
 Go to http://127.0.0.1:8000/cms and add a new basic page
-
-Testing
--------
-
-TODO
