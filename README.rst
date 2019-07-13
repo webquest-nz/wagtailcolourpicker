@@ -38,14 +38,13 @@ Settings
 
 Models
 ------
-Add into
+Add into your models.py
 
 .. code:: python
+
     # Add all colors from 'wagtailcolourpicker'
     # list names into your RichTextField(features=[get_list_features_name()]
     body.features += get_list_colour_features_name()
-
-
 
 Documentation
 -------------
