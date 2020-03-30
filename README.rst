@@ -8,7 +8,7 @@ Installation
 
 .. code:: bash
 
-   pip install git+https://github.com/Tivix/wagtailcolourpicker.git@master
+   pip install git+https://github.com/Vadim-Karpenko/wagtailcolourpicker.git@master
 
 Setup
 -----
