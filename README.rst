@@ -3,6 +3,8 @@ Wagtail Colour Picker
 
 A colour picker for Wagtail's DraftJS editor.
 
+( A rewrite of this document is still in progress because before this colour picker was not working with Wagtail > 2.  I have got it work up to version Wagtail 4.x )
+
 Installation
 ------------
 

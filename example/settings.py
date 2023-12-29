@@ -1,4 +1,4 @@
-from os import environ
+import os
 from os.path import dirname, abspath, join
 
 from django.urls import reverse_lazy
@@ -8,11 +8,11 @@ SITE_DIR = dirname(abspath(__file__))
 
 # Security
 
-SECRET_KEY = environ.get('SECRET_KEY', 'some secret key')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'some secret key')
 
 DEBUG = True
 
-ALLOWED_HOSTS = [] + environ.get('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = [] + os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 
 # Application definition
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'wagtail.contrib.forms',
     'wagtail.sites',
     'wagtail.contrib.modeladmin',
-    'wagtail.contrib.postgres_search',
+    #'wagtail.contrib.postgres_search',
     'wagtail.contrib.settings',
     'wagtail.contrib.search_promotions',
 
@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'wagtail.core.middleware.SiteMiddleware',
+    #'wagtail.core.middleware.SiteMiddleware',
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
 
@@ -90,12 +90,8 @@ WSGI_APPLICATION = 'example.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'HOST': environ.get('RDS_HOSTNAME'),
-        'PORT': environ.get('RDS_PORT'),
-        'NAME': environ.get('RDS_DB_NAME'),
-        'USER': environ.get('RDS_USERNAME'),
-        'PASSWORD': environ.get('RDS_PASSWORD'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(SITE_DIR, 'example.db'),
     }
 }
 
@@ -103,10 +99,10 @@ DATABASES = {
 # Email
 
 DEFAULT_FROM_EMAIL = 'Django <no_reply@example.com>'
-EMAIL_HOST = environ.get('EMAIL_HOST')
-EMAIL_PORT = environ.get('EMAIL_PORT')
-EMAIL_HOST_USER = environ.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
 
@@ -149,3 +145,12 @@ MEDIA_URL = "/media/"
 # Wagtail
 
 WAGTAIL_SITE_NAME = 'example.com'
+
+
+WAGTAILCOLOURPICKER_COLOURS = {
+   'black': '#000000',
+   'white': '#ffffff',
+   'blue': 'blue',
+   'red':'red',
+   'green':'green'
+}
