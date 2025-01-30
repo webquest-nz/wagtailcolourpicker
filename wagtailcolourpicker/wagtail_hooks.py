@@ -3,7 +3,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext as _
 
 from wagtail.admin.rich_text.editors.draftail import features as draftail_features
-from wagtail.core import hooks
+from wagtail import hooks
 
 from wagtailcolourpicker.conf import get_setting
 from wagtailcolourpicker.utils.colour import register_all_colour_features
