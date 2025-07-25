@@ -1,5 +1,5 @@
 # The app itself
 -e .
-wagtail<5
+wagtail<6
 mock
 # psycopg2-binary
