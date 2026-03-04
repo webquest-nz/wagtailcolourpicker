@@ -21,8 +21,7 @@ def register_admin_urls():
 def insert_editor_js():
     chooser_url = reverse('wagtailcolourpicker:chooser')
     js_includes = format_html(
-        "<script>window.chooserUrls.colourChooser = '{0}?style_type=text';"
-        "window.chooserUrls.backgroundColourChooser = '{0}?style_type=background';</script>",
+        "<script>window.chooserUrls.combinedColourChooser = '{0}';</script>",
         chooser_url,
     )
     return js_includes
@@ -35,20 +34,20 @@ def register_textcolour_feature(features):
     register_all_colour_features(features, style_type='background')
     #
 
-    text_control = {
-        'type': 'TEXTCOLOUR',
+    combined_control = {
+        'type': 'TEXTANDBACKGROUNDCOLOUR',
         'icon': get_setting('ICON'),
-        'description': _('Text Colour'),
+        'description': _('Text and Background Colour'),
     }
 
     features.register_editor_plugin(
         'draftail',
-        'textcolour',
+        'textandbackgroundcolour',
         draftail_features.EntityFeature(
-            text_control,
+            combined_control,
             js=[
                 'colourpicker/js/chooser.js',
-                'colourpicker/js/colourpicker.js',
+                'colourpicker/js/combinedcolourpicker.js',
             ],
             css={
                 'all': ['colourpicker/css/colourpicker.css'],
@@ -56,26 +55,4 @@ def register_textcolour_feature(features):
         )
     )
 
-    background_control = {
-        'type': 'BACKGROUNDCOLOUR',
-        'icon': get_setting('ICON'),
-        'description': _('Background Colour'),
-    }
-
-    features.register_editor_plugin(
-        'draftail',
-        'backgroundcolour',
-        draftail_features.EntityFeature(
-            background_control,
-            js=[
-                'colourpicker/js/chooser.js',
-                'colourpicker/js/backgroundcolourpicker.js',
-            ],
-            css={
-                'all': ['colourpicker/css/colourpicker.css'],
-            }
-        )
-    )
-
-    features.default_features.append('textcolour')
-    features.default_features.append('backgroundcolour')
+    features.default_features.append('textandbackgroundcolour')

@@ -9,16 +9,19 @@ class ColourRadioSelect(forms.widgets.RadioSelect):
 
 
 class ColourForm(forms.Form):
-    colour = forms.ChoiceField(
-        label=_("Colours"),
+    text_colour = forms.ChoiceField(
+        label=_("Text colour"),
         widget=ColourRadioSelect,
         required=False
     )
 
-    style_type = forms.CharField(widget=forms.HiddenInput(), required=False)
+    background_colour = forms.ChoiceField(
+        label=_("Background colour"),
+        widget=ColourRadioSelect,
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
-        style_type = kwargs.pop('style_type', 'text')
         super().__init__(*args, **kwargs)
-        self.fields['colour'].choices = get_colour_choices(style_type)
-        self.fields['style_type'].initial = style_type
+        self.fields['text_colour'].choices = get_colour_choices('text')
+        self.fields['background_colour'].choices = get_colour_choices('background')

@@ -15,7 +15,13 @@ COLOURPICKER_CHOOSER_MODAL_ONLOAD_HANDLERS = {
         });
     },
     'colour_chosen': function(modal, jsonData) {
-        modal.respond('colourChosen', jsonData['toggled_feature'], jsonData['all_features']);
+        modal.respond(
+            'colourChosen',
+            jsonData['toggled_text_feature'],
+            jsonData['toggled_background_feature'],
+            jsonData['all_text_features'],
+            jsonData['all_background_features']
+        );
         modal.close();
     }
 };
