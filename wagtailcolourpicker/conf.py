@@ -15,6 +15,10 @@ SETTINGS_DEFAULTS = {
     'COLOURS': {
         'black': '#000000',
         'white': '#ffffff'
+    },
+    'BACKGROUND_COLOURS': {
+        'yellow': '#ffff00',
+        'cyan': '#00ffff'
     }
 }
 

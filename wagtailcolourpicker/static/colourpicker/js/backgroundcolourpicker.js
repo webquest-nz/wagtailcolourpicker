@@ -3,7 +3,7 @@ var EditorState = window.DraftJS.EditorState;
 var Modifier = window.DraftJS.Modifier;
 var RichUtils = window.DraftJS.RichUtils;
 
-class TextColourSource extends React.Component {
+class BackgroundColourSource extends React.Component {
 
     constructor(props) {
         super(props);
@@ -16,7 +16,7 @@ class TextColourSource extends React.Component {
         $(document.body).on('hidden.bs.modal', this.onClose);
 
         this.workflow = ModalWorkflow({
-            url: window.chooserUrls.colourChooser,
+            url: window.chooserUrls.backgroundColourChooser,
             onload: COLOURPICKER_CHOOSER_MODAL_ONLOAD_HANDLERS,
             responses: {
                 colourChosen: this.onChosen
@@ -32,11 +32,9 @@ class TextColourSource extends React.Component {
     }
 
     onChosen(toggledColor, featuredColors) {
-        // set the chosen colour, ensuring all other colours are unset
         const { editorState, onComplete } = this.props;
         const selection = editorState.getSelection();
 
-        // Only allow one color to be set at a time for the current selection
         const nextContentState = featuredColors
             .reduce((contentState, color) => {
                 return Modifier.removeInlineStyle(contentState, selection, color)
@@ -50,14 +48,12 @@ class TextColourSource extends React.Component {
 
         const currentStyle = editorState.getCurrentInlineStyle();
 
-        // Unset style override for current color.
         if (selection.isCollapsed()) {
             nextEditorState = currentStyle.reduce((state, color) => {
               return RichUtils.toggleInlineStyle(state, color);
             }, nextEditorState);
         }
 
-        // If there's a color and it's being toggled on, apply it.
         if (toggledColor && !currentStyle.has(toggledColor)) {
             nextEditorState = RichUtils.toggleInlineStyle(
                 nextEditorState,
@@ -82,6 +78,7 @@ class TextColourSource extends React.Component {
 }
 
 window.draftail.registerPlugin({
-    type: 'TEXTCOLOUR',
-    source: TextColourSource,
+    type: 'BACKGROUNDCOLOUR',
+    source: BackgroundColourSource,
 });
+

@@ -4,34 +4,53 @@ from wagtail.admin.rich_text.converters.html_to_contentstate import InlineStyleE
 from wagtailcolourpicker.conf import get_setting
 
 
-def get_colour_choices():
-    return tuple(get_setting('COLOURS').items())
+STYLE_TYPES = {
+    'text': {
+        'setting': 'COLOURS',
+        'css_property': 'color',
+        'feature_prefix': 'colour',
+    },
+    'background': {
+        'setting': 'BACKGROUND_COLOURS',
+        'css_property': 'background-color',
+        'feature_prefix': 'background_colour',
+    },
+}
 
-
-def get_feature_name(name):
-    feature = 'colour_%s' % name
+def get_feature_name(name, style_type='text'):
+    feature = '%s_%s' % (STYLE_TYPES[style_type]['feature_prefix'], name)
     return feature
 
-
-def get_feature_name_upper(name):
-    return get_feature_name(name).upper()
-
-
-def get_feature_name_list():
-    return [get_feature_name_upper(name) for name in get_setting('COLOURS').keys()]
+def get_colours(style_type='text'):
+    style_config = STYLE_TYPES[style_type]
+    return get_setting(style_config['setting'])
 
 
-def register_color_feature(name, colour, features):
-    feature_name = get_feature_name(name)
-    type_ = get_feature_name_upper(name)
+def get_colour_choices(style_type='text'):
+    return tuple(get_colours(style_type).items())
+
+def get_feature_name_upper(name, style_type='text'):
+    return get_feature_name(name, style_type).upper()
+
+def get_feature_name_list(style_type='text'):
+    return [
+        get_feature_name_upper(name, style_type)
+        for name in get_colours(style_type).keys()
+    ]
+
+def register_color_feature(name, colour, features, style_type='text'):
+    style_config = STYLE_TYPES[style_type]
+    css_property = style_config['css_property']
+    feature_name = get_feature_name(name, style_type)
+    type_ = get_feature_name_upper(name, style_type)
     tag = 'span'
-    detection = '%s[style="color: %s;"]' % (tag, colour)
+    detection = '%s[style="%s: %s;"]' % (tag, css_property, colour)
 
     control = {
         'type': type_,
         'icon': get_setting('ICON'),
         'description': colour,
-        'style': {'color': colour}
+        'style': {css_property: colour}
     }
 
     features.register_editor_plugin(
@@ -46,7 +65,7 @@ def register_color_feature(name, colour, features):
                     'element': tag,
                     'props': {
                         'style': {
-                            'color': colour
+                            css_property: colour
                         }
                     }
                 }
@@ -57,19 +76,16 @@ def register_color_feature(name, colour, features):
     features.default_features.append(feature_name)
 
 
-def register_all_colour_features(features):
-    for name, colour in get_setting('COLOURS').items():
-        register_color_feature(name, colour, features)
+def register_all_colour_features(features, style_type='text'):
+    for name, colour in get_colours(style_type).items():
+        register_color_feature(name, colour, features, style_type)
 
-
-def get_list_colour_features_name():
+def get_list_colour_features_name(style_type='text'):
     """
     Add list names into your
     models.py RichTextField(features=[get_list_features_name()]
     """
-    list_features_name = list()
-
-    for name, colour in get_setting('COLOURS').items():
-        name_feature = get_feature_name(name)
-        list_features_name.append(name_feature)
-    return list_features_name
+    return [
+        get_feature_name(name, style_type)
+        for name in get_colours(style_type).keys()
+    ]

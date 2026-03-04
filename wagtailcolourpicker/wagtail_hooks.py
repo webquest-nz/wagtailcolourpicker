@@ -19,9 +19,11 @@ def register_admin_urls():
 
 @hooks.register('insert_editor_js')
 def insert_editor_js():
+    chooser_url = reverse('wagtailcolourpicker:chooser')
     js_includes = format_html(
-        "<script>window.chooserUrls.colourChooser = '{0}';</script>",
-        reverse('wagtailcolourpicker:chooser')
+        "<script>window.chooserUrls.colourChooser = '{0}?style_type=text';"
+        "window.chooserUrls.backgroundColourChooser = '{0}?style_type=background';</script>",
+        chooser_url,
     )
     return js_includes
 
@@ -29,23 +31,21 @@ def insert_editor_js():
 @hooks.register('register_rich_text_features')
 def register_textcolour_feature(features):
     # register all colour features
-    register_all_colour_features(features)
+    register_all_colour_features(features, style_type='text')
+    register_all_colour_features(features, style_type='background')
+    #
 
-    # register the color picker
-    feature_name = 'textcolour'
-    type_ = feature_name.upper()
-
-    control = {
-        'type': type_,
+    text_control = {
+        'type': 'TEXTCOLOUR',
         'icon': get_setting('ICON'),
         'description': _('Text Colour'),
     }
 
     features.register_editor_plugin(
         'draftail',
-        feature_name,
+        'textcolour',
         draftail_features.EntityFeature(
-            control,
+            text_control,
             js=[
                 'colourpicker/js/chooser.js',
                 'colourpicker/js/colourpicker.js',
@@ -56,4 +56,26 @@ def register_textcolour_feature(features):
         )
     )
 
-    features.default_features.append(feature_name)
+    background_control = {
+        'type': 'BACKGROUNDCOLOUR',
+        'icon': get_setting('ICON'),
+        'description': _('Background Colour'),
+    }
+
+    features.register_editor_plugin(
+        'draftail',
+        'backgroundcolour',
+        draftail_features.EntityFeature(
+            background_control,
+            js=[
+                'colourpicker/js/chooser.js',
+                'colourpicker/js/backgroundcolourpicker.js',
+            ],
+            css={
+                'all': ['colourpicker/css/colourpicker.css'],
+            }
+        )
+    )
+
+    features.default_features.append('textcolour')
+    features.default_features.append('backgroundcolour')
