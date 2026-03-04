@@ -1,2 +1,4 @@
 include LICENSE
 recursive-include wagtailcolourpicker *.py *.html *.js *.css
+prune wagtailcolourpicker/node_modules
+global-exclude __pycache__ *.py[cod]
